@@ -1,8 +1,6 @@
 translate-selection
 ===================
 
-Description
-
 Manipulation, language translation and speak any html selection range on webpage using Goole Translate and Google TTS service.
 
 Features
