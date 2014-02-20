@@ -1,0 +1,23 @@
+.translate-pop {
+  position: fixed;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: black;
+  box-shadow: #222 3px 3px 10px;
+  min-width: 150px;
+  overflow: auto;
+}
+
+.focused-pop {
+  border: 2px solid black;
+}
+
+.translated {
+  background-color: #F1FFF3;
+}
+
+.original {
+  background-color: #FFFEF1;
+}

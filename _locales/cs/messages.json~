@@ -1,0 +1,55 @@
+{
+  "pop_title": {
+    "message": "Nastavení překladu a klávesové zkratky"
+  },
+  "tr_key_label": {
+    "message": "Vložte <b>klávesu</b> pro <b>překlad výběru</b> (A - Z):"
+  },
+  "tts_key_label": {
+    "message": "Vložte <b>klávesu</b> pro <b>přečtení hlasem</b> výběru (A - Z):"
+  },
+  "resize_key_label": {
+    "message": "Vyberte <b>drženou klávesu</b> pro <b>změnu rozměrů</b> okna myší:"
+  },
+  "freeze_key_label": {
+    "message": "Vyberte <b>drženou klávesu</b> pro <b>fixaci</b> okna:"
+  },
+  "src_lang_label": {
+    "message": "Vyberte <b>zdrojový jazyk</b> překladu:"
+  },
+  "tr_lang_label": {
+    "message": "Vyberte <b>cílový jazyk</b> překladu:"
+  },
+  "reset_button": {
+    "message": "Obnovit výchozí"
+  },
+
+
+  "freeze_res_same_key_err": {
+    "message": "Klávesa pro fixaci a změnu rozměrů okna musí být rozdílná! Hlavu vzhůru, zkuste ji nastavit znovu..."
+  },
+  "srclkey_trlkey_same_err": {
+    "message": "Klávesa pro překlad výběru a přečtení hlasem musí být rozdílná! Hlavu vzhůru, zkuste ji nastavit znovu.."
+  },
+  "invalid_key_err": {
+    "message": "Klávesa pro překlad nebo přečtení hlasem musí být [a - z, A - Z], ale vy jste zadali: "
+  },
+  "invalid_option_err": {
+    "message": "Nesprávná hodnota pro výběr: "
+  },
+  "options_saved": {
+    "message": "Dobrá práce! Všechna nastavení byla uložena."
+  },
+  "first_browse_err": {
+    "message": "Musíte prvně načíst nějakou stránku, aby se načetlo výchozí nastavení rozšáření TRS!"
+  },
+  "options_loaded": {
+    "message": "Nastavení načtena."
+  },
+  "options_reseted": {
+    "message": "Všechna nastavení byla vymazána! Až načtete příští stránku, dojde k uplatnění výchozího nastavení."
+  },
+  "icon_popup_title": {
+    "message": "Options"
+  }
+}
