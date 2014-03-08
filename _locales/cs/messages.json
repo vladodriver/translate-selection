@@ -51,5 +51,8 @@
   },
   "icon_popup_title": {
     "message": "Nastavení"
+  },
+  "translation_fail": {
+    "message": "Překlad selhal, zkontrolujte console.log!"
   }
 }

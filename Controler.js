@@ -38,7 +38,7 @@ Controler.prototype.translate = function (str) {
   }
 };
 
-Controler.prototype.translateHTML = function(el, srclang, trlang) {
+Controler.prototype.translateHTML = function(el) {
   var nodear = []; /*text nodes untranslated*/
   var trtextar = []; /*translated texts*/
   var trnodear = []; /*text nodes translated*/
@@ -53,7 +53,7 @@ Controler.prototype.translateHTML = function(el, srclang, trlang) {
       node = node.nextSibling;
     }
   };
-
+  /*translate textNodes joined with (joinkey) one string*/
   var translated = function(domar, key) {
     var textar = []; /*extracted texts from dom nodes*/
     for (var i = 0; i < domar.length; i++) {
@@ -61,7 +61,7 @@ Controler.prototype.translateHTML = function(el, srclang, trlang) {
     }
     var text = textar.join(key);
     /*translate text on html elements splited on joinkey*/
-    var translated = self.translate(text, srclang, trlang);
+    var translated = self.translate(text);
     if (translated) {
       trtextar = translated.split(joinkey);
       for(var e = 0; e < trtextar.length; e++) {
@@ -69,19 +69,19 @@ Controler.prototype.translateHTML = function(el, srclang, trlang) {
         nodear[e].data = fragment;
       }
       self.model.translated = el.innerHTML;
-      return true;
     } else {
       /*Switch HTML to Error mesage*/
-      el.innerHTML = '<strong>Translation failed, check your console.log...</strong>';
-      return false;
+      self.model.translated = el.innerHTML = '<strong>' + chrome.i18n.getMessage('translation_fail') + '</strong>';
     }
   };
+
   /*save all text nodes*/
   walker(el, function (node) {
     if(node.nodeType === 3) {
       var text = node.data.trim();
       /*text data must be non-empty and included any \w char*/
       if(text.length > 0 && self.isword(text)) {
+        /*<pre> and non-<pre> content logic*/
         self.isinpre(node, function(inar) {
           if (inar) {
             /*filter multiple spaces only*/
@@ -95,14 +95,9 @@ Controler.prototype.translateHTML = function(el, srclang, trlang) {
       }
     }
   });
+
   /* translate text nodes*/
-  var trans = translated(nodear, joinkey);
-  if (trans) {
-    this.model.translated = el.innerHTML;
-    return true;
-  } else {
-    return false;
-  }
+  translated(nodear, joinkey);
 };
 
 Controler.prototype.isinpre = function(node, cb) {

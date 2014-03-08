@@ -51,5 +51,8 @@
   },
   "icon_popup_title": {
     "message": "Options"
+  },
+  "translation_fail": {
+    "message": "Translate failed, check your console.log!"
   }
 }

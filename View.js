@@ -46,9 +46,8 @@ View.prototype.popupcreate = function() {
   pop.scx = Status.scrollX;
   pop.scy = Status.scrollY;
   this.controler.model.original = pop.innerHTML;
+  /*translation from Google*/
   this.controler.translateHTML(pop);
-  this.controler.model.translated = pop.innerHTML;
-  pop.innerHTML = this.controler.model.translated;
   pop.classList.add('translated');
   pop.lang = this.controler.model.trlang; /*add lang*/
   pop.title = this.controler.model.trlang.toUpperCase();
