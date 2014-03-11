@@ -6,10 +6,10 @@
     "message": "Vložte <b>klávesu</b> pro <b>překlad výběru</b> (A - Z):"
   },
   "tts_key_label": {
-    "message": "Vložte <b>klávesu</b> pro <b>přečtení hlasem</b> výběru (A - Z):"
+    "message": "Vložte <b>klávesu</b> pro <b>přečtení hlasem</b> (A - Z):"
   },
   "resize_key_label": {
-    "message": "Vyberte <b>drženou klávesu</b> pro <b>změnu rozměrů</b> okna myší:"
+    "message": "Vyberte <b>drženou klávesu</b> pro <b>změnu rozměrů</b> okna:"
   },
   "freeze_key_label": {
     "message": "Vyberte <b>drženou klávesu</b> pro <b>fixaci</b> okna:"

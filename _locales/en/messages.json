@@ -6,13 +6,13 @@
     "message": "Enter <b>key</b> option for <b>translate selection</b> (A - Z):"
   },
   "tts_key_label": {
-    "message": "Enter <b>key</b> option for <b>TTS speak</b> selection (A - Z):"
+    "message": "Enter <b>key</b> option for <b>TTS speak</b> (A - Z):"
   },
   "resize_key_label": {
-    "message": "Select <b>hold key</b> for mouse <b>resize selection</b> popups:"
+    "message": "Select <b>hold key</b> for mouse <b>resize selection</b> popup:"
   },
   "freeze_key_label": {
-    "message": "Select <b>hold</b> key for mouse <b>freeze selection</b> popups:"
+    "message": "Select <b>hold</b> key for mouse <b>freeze selection</b> popup:"
   },
   "src_lang_label": {
     "message": "Select translation <b>source language</b>:"
