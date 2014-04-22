@@ -1,245 +1,320 @@
 (function() {
-var Langs = {
-  "Autodetect": "auto",
-  "Afrikaans": "af",
-  "Albanian":	"sq",
-  "Arabic": "ar",
-  "Azerbaijani": "az",
-  "Basque": "eu",
-  "Bengali": "bn",
-  "Belarusian":	"be",
-  "Bulgarian":	"bg",
-  "Catalan": "ca",
-  "Chinese Simp.": "zh-CN",
-  "Chinese Trad.": "zh-TW",
-  "Croatian": "hr",
-  "Czech": "cs",
-  "Danish": "da",
-  "Dutch": "nl",
-  "English": "en",
-  "Esperanto": "eo",
-  "Estonian": "et",
-  "Filipino":	"tl",
-  "Finnish": "fi",
-  "French":	"fr",
-  "Galician":	"gl",
-  "Georgian":	"ka",
-  "German": "de",
-  "Greek": "el",
-  "Gujarati":	"gu",
-  "Haitian Creole":	"ht",
-  "Hebrew": "iw",
-  "Hindi": "hi",
-  "Hungarian":	"hu",
-  "Icelandic": "is",
-  "Indonesian":	"id",
-  "Irish": "ga",
-  "Italian": "it",
-  "Japanese":	"ja",
-  "Kannada": "kn",
-  "Korean":	"ko",
-  "Latin": "la",
-  "Latvian": "lv",
-  "Lithuanian":	"lt",
-  "Macedonian":	"mk",
-  "Malay": "ms",
-  "Maltese": "mt",
-  "Norwegian": "no",
-  "Persian": "fa",
-  "Polish":	"pl",
-  "Portuguese":	"pt",
-  "Romanian":	"ro",
-  "Russian": "ru",
-  "Serbian": "sr",
-  "Slovak":	"sk",
-  "Slovenian": "sl",
-  "Spanish": "es",
-  "Swahili": "sw",
-  "Swedish": "sv",
-  "Tamil": "ta",
-  "Telugu":	"te",
-  "Thai":	"th",
-  "Turkish": "tr",
-  "Ukrainian": "uk",
-  "Urdu":	"ur",
-  "Vietnamese":	"vi",
-  "Welsh": "cy",
-  "Yiddish": "yi"
-};
-
-var HoldKeys = {
-  "Shift": 16,
-  "Ctrl": 17
-};
-
-/*Fill i18n strings*/
-var title = document.querySelector('title');
-title.textContent = chrome.i18n.getMessage('pop_title');
-var trkeyl = document.querySelector('label[for="translate-key"]');
-trkeyl.innerHTML = chrome.i18n.getMessage('tr_key_label');
-var ttsl = document.querySelector('label[for="tts-key"]');
-ttsl.innerHTML = chrome.i18n.getMessage('tts_key_label');
-var resl =  document.querySelector('label[for="resize-hold-key"]');
-resl.innerHTML = chrome.i18n.getMessage('resize_key_label');
-var frel = document.querySelector('label[for="freeze-hold-key"]');
-frel.innerHTML = chrome.i18n.getMessage('freeze_key_label');
-var srcl = document.querySelector('label[for="source-language"]');
-srcl.innerHTML = chrome.i18n.getMessage('src_lang_label');
-var trl = document.querySelector('label[for="target-language"]');
-trl.innerHTML = chrome.i18n.getMessage('tr_lang_label');
-var reset = document.querySelector('#reset');
-reset.textContent = chrome.i18n.getMessage('reset_button');
-
-/*Fill in form elements options*/
-/*Source language options*/
-var srclanghtml = '';
-for (var s in Langs) {
-  srclanghtml += '<option value="' + Langs[s] + '">' + s + '</option>';
-}
-document.getElementById('source-language').innerHTML = srclanghtml;
-
-/*Target language options*/
-var trlanghtml = '';
-for (var t in Langs) {
-  trlanghtml += '<option value="' + Langs[t] + '">' + t + '</option>';
-}
-document.getElementById('target-language').innerHTML = trlanghtml;
-
-/*Resize and freeze popup keys fill*/
-var resizehtml = '';
-var freezehtml = '';
-for (var rf in HoldKeys) {
-  resizehtml += '<option value="' + HoldKeys[rf] + '">' + rf + '</option>';
-  freezehtml += '<option value="' + HoldKeys[rf] + '">' + rf + '</option>';
-}
-document.getElementById('resize-hold-key').innerHTML = resizehtml;
-document.getElementById('freeze-hold-key').innerHTML = freezehtml;
-
-/*Get and save options to Local Storage*/
-var Storage = function() {};
-
-Storage.prototype.validchar = function(c) {
-  if ( c.match(/^[a-zA-Z]$/g) ) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-Storage.prototype.validopt = function(opt, optobj) {
-  if (opt in optobj) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-Storage.prototype.save = function() {
-  var errors = [];
-  /*Validate function for characters*/
-  var validchar = function(c) {
-    if ( c.toString().match(/^[a-zA-Z]$/g) ) {
-      return true;
-    } else {
-      return false;
+    /*globals chrome*/
+    var Langs = {
+      "Autodetect": "auto",
+      "Afrikaans": "af",
+      "Albanian":	"sq",
+      "Arabic": "ar",
+      "Azerbaijani": "az",
+      "Basque": "eu",
+      "Bengali": "bn",
+      "Belarusian":	"be",
+      "Bulgarian":	"bg",
+      "Catalan": "ca",
+      "Chinese Simp.": "zh-CN",
+      "Chinese Trad.": "zh-TW",
+      "Croatian": "hr",
+      "Czech": "cs",
+      "Danish": "da",
+      "Dutch": "nl",
+      "English": "en",
+      "Esperanto": "eo",
+      "Estonian": "et",
+      "Filipino":	"tl",
+      "Finnish": "fi",
+      "French":	"fr",
+      "Galician":	"gl",
+      "Georgian":	"ka",
+      "German": "de",
+      "Greek": "el",
+      "Gujarati":	"gu",
+      "Haitian Creole":	"ht",
+      "Hebrew": "iw",
+      "Hindi": "hi",
+      "Hungarian":	"hu",
+      "Icelandic": "is",
+      "Indonesian":	"id",
+      "Irish": "ga",
+      "Italian": "it",
+      "Japanese":	"ja",
+      "Kannada": "kn",
+      "Korean":	"ko",
+      "Latin": "la",
+      "Latvian": "lv",
+      "Lithuanian":	"lt",
+      "Macedonian":	"mk",
+      "Malay": "ms",
+      "Maltese": "mt",
+      "Norwegian": "no",
+      "Persian": "fa",
+      "Polish":	"pl",
+      "Portuguese":	"pt",
+      "Romanian":	"ro",
+      "Russian": "ru",
+      "Serbian": "sr",
+      "Slovak":	"sk",
+      "Slovenian": "sl",
+      "Spanish": "es",
+      "Swahili": "sw",
+      "Swedish": "sv",
+      "Tamil": "ta",
+      "Telugu":	"te",
+      "Thai":	"th",
+      "Turkish": "tr",
+      "Ukrainian": "uk",
+      "Urdu":	"ur",
+      "Vietnamese":	"vi",
+      "Welsh": "cy",
+      "Yiddish": "yi"
+    };
+    
+    var HoldKeys = {
+      "Shift": 16,
+      "Ctrl": 17
+    };
+    
+    /*Fill i18n strings*/
+    var title = document.querySelector('title');
+    title.textContent = chrome.i18n.getMessage('pop_title');
+    var trkeyl = document.querySelector('label[for="translate-key"]');
+    trkeyl.innerHTML = chrome.i18n.getMessage('tr_key_label');
+    var ttsl = document.querySelector('label[for="tts-key"]');
+    ttsl.innerHTML = chrome.i18n.getMessage('tts_key_label');
+    var resl =  document.querySelector('label[for="resize-hold-key"]');
+    resl.innerHTML = chrome.i18n.getMessage('resize_key_label');
+    var frel = document.querySelector('label[for="freeze-hold-key"]');
+    frel.innerHTML = chrome.i18n.getMessage('freeze_key_label');
+    var srcl = document.querySelector('label[for="source-language"]');
+    srcl.innerHTML = chrome.i18n.getMessage('src_lang_label');
+    var trl = document.querySelector('label[for="target-language"]');
+    trl.innerHTML = chrome.i18n.getMessage('tr_lang_label');
+    var reset = document.querySelector('#reset');
+    reset.textContent = chrome.i18n.getMessage('reset_button');
+    var msg = document.querySelector('#msg'); //messages and errors
+    /*Fill in form elements options*/
+    /*Source language options*/
+    var srclanghtml = '';
+    for (var s in Langs) {
+      srclanghtml += '<option value="' + Langs[s] + '">' + s + '</option>';
     }
-  };
-  /*Validate function for selected options*/
-  var validopt = function(opt, optobj) {
-    if (opt in optobj) {
-      return true;
-    } else {
-      return false;
+    document.getElementById('source-language').innerHTML = srclanghtml;
+    
+    /*Target language options*/
+    var trlanghtml = '';
+    for (var t in Langs) {
+      trlanghtml += '<option value="' + Langs[t] + '">' + t + '</option>';
     }
-  };
-  /*Validate non-diffrend options*/
-  var validdiff = function(obj) {
-    /*Corection Ctrl/Shift - prevent select same selection and same keys*/
-    if (obj['freeze-hold-key'][1] === obj['resize-hold-key'][1]) {
-      errors.push(chrome.i18n.getMessage('freeze_res_same_key_err'));
-    } else if (obj['translate-key'][1] === obj['tts-key'][1]) {
-      errors.push(chrome.i18n.getMessage('srclkey_trlkey_same_err'));
+    document.getElementById('target-language').innerHTML = trlanghtml;
+    
+    /*Resize and freeze popup keys fill*/
+    var resizehtml = '';
+    var freezehtml = '';
+    for (var rf in HoldKeys) {
+      resizehtml += '<option value="' + HoldKeys[rf] + '">' + rf + '</option>';
+      freezehtml += '<option value="' + HoldKeys[rf] + '">' + rf + '</option>';
     }
-  };
-  /*save keys (keyCodes) and language options*/
-  var saveopts = {
-    options: {}
-  };
-  /*validate and save text inputs*/
-  var inputs = Array.prototype.slice.call(document.querySelectorAll('input'));
-  var self = this;
-  inputs.forEach(function(e) {
-    if (validchar(e.value)) {
-      saveopts.options[e.id] = [e.value.toUpperCase(), e.value.toUpperCase().charCodeAt()];
-    } else {
-      errors.push(chrome.i18n.getMessage('invalid_key_er') + e.value);
-    }
-  });
-  /*validate and save select inputs*/
-  var selects = Array.prototype.slice.call(document.querySelectorAll('select'));
-  var optobject; //Langs or HoldKeys
-  selects.forEach(function(o) {
-    if (o.id === 'source-language' || o.id === 'target-language') {
-      optobject = Langs;
-    } else if (o.id === 'resize-hold-key' || o.id === 'freeze-hold-key') {
-      optobject = HoldKeys;
-    }
-    var selindex = o.selectedIndex;
-    var selopt = o.options[selindex];
-    if (validopt(selopt.textContent, optobject)) {
-      saveopts.options[o.id] = [selopt.textContent, parseInt(selopt.value, 10) || selopt.value];
-    } else {
-      errors.push(chrome.i18n.getMessage('invalid_option_err') + selopt.textContent);
-    }
-  });
-  validdiff(saveopts.options);
-  if(errors.length === 0) {
-    chrome.storage.local.set(saveopts, function() {
-      msg.style.color = 'green';
-      msg.textContent = chrome.i18n.getMessage('options_saved');
-    });
-  } else {
-    msg.style.color = 'red';
-    msg.textContent = errors.join(' ');
-  }
-};
-
-Storage.prototype.load = function() {
-  chrome.storage.local.get('options', function(o) {
-    var msg = document.getElementById('msg');
-    if (Object.keys(o).length === 0) {
-      msg.style.color = 'red';
-      msg.textContent = chrome.i18n.getMessage('first_browse_err');
-      return false;
-    }
-    var options = o.options;
-    /*load opts to text inputs*/
-    var inputs = Array.prototype.slice.call(document.querySelectorAll('input'));
-    inputs.forEach(function(e,i,a) {
-      e.value = options[e.id][0];
-    });
-    /*Find child sel and setelements*/
-    var selects = Array.prototype.slice.call(document.querySelectorAll('select'));
-    selects.forEach(function(e,i,a) {
-      var selector = '[value="' + options[e.id][1] + '"]';
-      var option = e.querySelectorAll(selector)[0];
-      option.selected = true;
-    }); 
-    msg.style.color = 'green';
-    msg.textContent = chrome.i18n.getMessage('options_loaded');
-  });
-};
-
-Storage.prototype.reseting = function(e) {
-  var msg = document.getElementById('msg');
-  chrome.storage.local.clear();
-  msg.style.color = 'green';
-  msg.textContent = chrome.i18n.getMessage('options_reseted');
-}
-
-/*Main program...*/
-var storage = new Storage();
-storage.load(); /*Load default or saved options*/
-document.querySelector('form').onchange = storage.save;
-document.getElementById('reset').onmousedown = storage.reseting;
+    document.getElementById('resize-hold-key').innerHTML = resizehtml;
+    document.getElementById('freeze-hold-key').innerHTML = freezehtml;
+    
+    /**************Storage save and load options Class **********************/
+    /*Get and save options to Local Storage*/
+    var Storage = function() {
+      this.errors = [];
+      this.opts = {
+        options: {},
+        disurls: []
+      };
+    };
+    
+    Storage.prototype.validchar = function(c) {
+      if (!c.match(/^[a-zA-Z]$/g)) {
+        this.errors.push(chrome.i18n.getMessage('invalid_key_err') + c);
+        return false;
+      } else {
+        return true;
+      }
+    };
+    
+    Storage.prototype.validopt = function(opt, optobj) {
+      if (!(opt in optobj)) {
+        this.errors.push(chrome.i18n.getMessage('invalid_key_err') + opt);
+        return false;
+      } else {
+        return true;
+      }
+    };
+    
+    Storage.prototype.validdiff = function() {
+      /*Corection Ctrl/Shift - prevent select same selection and same keys*/
+      var translateel = document.getElementById('translate-key');
+      var ttsel = document.getElementById('tts-key');
+      var resizeel = document.getElementById('resize-hold-key');
+      var freezeel = document.getElementById('freeze-hold-key');
+      
+      if (resizeel.options[resizeel.selectedIndex].value === freezeel.options[freezeel.selectedIndex].value) {
+        this.errors.push(chrome.i18n.getMessage('freeze_res_same_key_err'));
+      } else if (translateel.value.toUpperCase() === ttsel.value.toUpperCase()) {
+        this.errors.push(chrome.i18n.getMessage('srclkey_trlkey_same_err'));
+      }
+    };
+    
+    Storage.prototype.gethost = function(url) {
+      var a = document.createElement('a');
+      a.href = url;
+      return a.host;
+    };
+    
+    Storage.prototype.addurl = function(url) {
+      /*add url to array only if no exist*/
+      if (this.opts.disurls.indexOf(url) === -1) {
+        this.opts.disurls.push(url);
+      }
+    };
+    
+    Storage.prototype.delurl = function(url) {
+      /*Delete url of array only if exist*/
+      if (this.opts.disurls.indexOf(url) !== -1) {
+        this.opts.disurls.splice(this.opts.disurls.indexOf(url), 1);
+      }
+    };
+    
+    Storage.prototype.message = function(msg, type) {
+      var msgel = document.getElementById('msg');
+      if (type === 'm') {
+        msgel.style.color = 'green';
+      } else if (type === 'e') {
+        msgel.style.color = 'red';
+      }
+      msgel.textContent = msg;
+    };
+    
+    Storage.prototype.inactive = function(bol) {
+      /*Activate/deactivate inputs in form except checkbox and checkbox label*/
+      var elements = document.querySelectorAll('.activatable');
+      var disurllabel = document.querySelector('label[for="on-off"]');
+      var checkbox = document.querySelector('#on-off');
+      for (var i = 0; i < elements.length; i++) {
+        var el = elements[i];
+        if (el.nodeName === 'LABEL') {
+          el.style.color = (bol) ? '#ddd' : 'black';
+        } else if (el.nodeName === 'INPUT' || el.nodeName === 'BUTTON') {
+          el.disabled = (bol) ? true : false;
+        }
+      }
+      checkbox.checked = (bol) ? false : true;
+      disurllabel.innerHTML = (bol) ?
+        chrome.i18n.getMessage('enable_url_label') :
+        chrome.i18n.getMessage('disable_url_label');
+    };
+    
+    Storage.prototype.save = function() {
+      /*Save blacklist urls*/
+      var self = this;
+      chrome.tabs.query({active: true, windowType: 'normal'}, function(tab) {
+        self.message('', 'm');
+        /*Validate and save disable state*/
+        var domain = self.gethost(tab[0].url);
+        var checkbox = document.getElementById('on-off');
+        if(checkbox.checked) {
+          self.delurl(domain);
+          self.inactive(false);
+        } else {
+          self.addurl(domain);
+          self.inactive(true);
+        }
+        
+        /*validate text inputs translate and tts key*/
+        var keyinps = document.querySelectorAll('input[type="text"]');
+        for (var i = 0; i < keyinps.length; i++) {
+          var ki = keyinps[i];
+          ki.value = ki.value.toUpperCase();
+          if (self.validchar(ki.value)) {
+            self.opts.options[ki.id] = [ki.value, ki.value.charCodeAt()];
+          }
+        }
+        
+        /*validate select options*/
+        var csels = document.querySelectorAll('select');
+        for (var j = 0; j < csels.length; j++) {
+          var csel = csels[j];
+          var selcon = csel.options[csel.selectedIndex].textContent;
+          var selval = csel.options[csel.selectedIndex].value;
+          var optobj = (csel.id === 'resize-hold-key' || csel.id === 'freeze-hold-key') ? HoldKeys : Langs;
+          if(self.validopt(selcon, optobj)) {
+            self.opts.options[csel.id] = [selcon, selval];
+          }
+        }
+        
+        /*Validate duplicate values for keys and shift/ctrl select options*/
+        self.validdiff();
+        if (self.errors[0]) {
+          self.message(self.errors.join(' '), 'e');
+          self.errors = []; //error state reset
+        } else {
+          chrome.storage.local.set(self.opts, function() {
+            self.message(chrome.i18n.getMessage('options_saved'), 'm');
+          });
+        }
+      });
+    };
+    
+    Storage.prototype.load = function() {
+      var self = this;
+      chrome.storage.local.get(null, function(o) {
+        if (Object.keys(o).length === 0) {
+          self.message(chrome.i18n.getMessage('first_browse_err'), 'e');
+          var hideall = document.querySelectorAll('form, button, hr');
+          for (var e = 0; e < hideall.length; e++) {
+            hideall[e].style.display = 'none';
+          }
+          return false;
+        }
+        var options = o.options;
+        /*load disable domain checkbox and activate/deactivate TRS*/
+        self.opts.disurls = o.disurls;
+        chrome.tabs.query({active: true, windowType: 'normal'}, function(tab) {
+          var domain = self.gethost(tab[0].url);
+          var deactivate = (self.opts.disurls.indexOf(domain) !== -1) ? true : false;
+          self.inactive(deactivate);
+        });
+        /*load values of text inputs*/
+        var trttskeys = document.querySelectorAll('input[type="text"]');
+        for (var i = 0; i < trttskeys.length; i++) {
+          var el = trttskeys[i];
+          el.value = options[el.id][0];
+        }
+        /*load options for checkboxes shift/ctrl*/
+        var selects = document.querySelectorAll('select');
+        for (var j = 0; j < selects.length; j++) {
+          var sel = selects[j];
+          var loadopts = options[sel.id];
+          var selopts = sel.options;
+          for (var k = 0; k < selopts.length; k++) {
+            var opt = selopts[k];
+            if (opt.textContent === loadopts[0].toString() && opt.value === loadopts[1].toString()) {
+              sel.selectedIndex = k;
+            }
+          }
+        }
+        /*Load disurls*/
+        self.opts.disurls = o.disurls;
+        self.message(msg.textContent = chrome.i18n.getMessage('options_loaded'), 'm');
+      });
+    };
+    
+    Storage.prototype.reseting = function(e) {
+      chrome.storage.local.clear();
+      this.message(chrome.i18n.getMessage('options_reseted'), 'm');
+    };
+    
+    /*Main program...*/
+    var storage = new Storage();
+    storage.load(); /*Load default or saved options*/
+    document.querySelector('form').onchange = function() {
+      storage.save();
+    };
+    document.getElementById('reset').onclick = function() {
+      storage.reseting();
+    };
+    
 }) ();

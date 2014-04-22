@@ -2,6 +2,12 @@
   "pop_title": {
     "message": "Options for translating and keyboard shortcuts"
   },
+  "disable_url_label": {
+    "message": "TRS is <b>enabled</b> for this domain URL, uncheck for disable."
+  },
+  "enable_url_label": {
+    "message": "TRS is <b>disabled</b> for this domain URL, check for enable."
+  },
   "tr_key_label": {
     "message": "Enter <b>key</b> option for <b>translate selection</b> (A - Z):"
   },
@@ -23,7 +29,6 @@
   "reset_button": {
     "message": "Reset to defaults"
   },
-
 
   "freeze_res_same_key_err": {
     "message": "Freeze and resize keys must be differend! Head up and try setup this again.."
@@ -50,7 +55,7 @@
     "message": "All options deleted! When refresh any page, option will set by default."
   },
   "icon_popup_title": {
-    "message": "Options"
+    "message": "Translate selection - options"
   },
   "translation_fail": {
     "message": "Translate failed, check your console.log!"

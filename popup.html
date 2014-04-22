@@ -6,35 +6,37 @@
   </head>
   <body>
     <form id="main-settings">
-      <label for="translate-key"></label>
-      <input id="translate-key" type="text">
+      <label for="on-off"></label>
+      <input id="on-off" type="checkbox" checked>
+      <label for="translate-key" class="activatable"></label>
+      <input id="translate-key" type="text" class="activatable">
         <!-- translate key selection options -->
-      <label for="tts-key"></label>
-      <input id="tts-key" type="text">
+      <label for="tts-key" class="activatable"></label>
+      <input id="tts-key" type="text" class="activatable">
         <!-- translate key selection options -->
       <hr />
 
-      <label for="resize-hold-key"></label>
-      <select id="resize-hold-key">
+      <label for="resize-hold-key" class="activatable"></label>
+      <select id="resize-hold-key" class="activatable">
         <!-- resize hold key selection options -->
       </select>
-      <label for="freeze-hold-key"></label>
-      <select id="freeze-hold-key">
+      <label for="freeze-hold-key" class="activatable"></label>
+      <select id="freeze-hold-key" class="activatable">
         <!-- freeze hold key selection options -->
       </select>
       <hr />
 
-      <label for="source-language"></label>
-      <select id="source-language">
+      <label for="source-language" class="activatable"></label>
+      <select id="source-language" class="activatable">
         <!-- source language options -->
       </select>
-      <label for="target-language"></label>
-      <select id="target-language">
+      <label for="target-language" class="activatable"></label>
+      <select id="target-language" class="activatable">
         <!-- target language options -->
       </select>
     </form>
     <hr />
-    <button id="reset">Reset to defaults</button>
+    <button id="reset" class="activatable">Reset to defaults</button>
     <hr />
     <p id="msg"></p>
     <script src="popup.js"></script>

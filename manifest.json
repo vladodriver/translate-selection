@@ -2,7 +2,7 @@
   "name": "Translation on selection",
   "default_locale": "en",
   "manifest_version": 2,
-  "version": "0.94",
+  "version": "0.95",
   "description": "Manipulation, language translation and speak any html selection range on webpage using Goole Translate and Google TTS service.",
   
   "content_scripts": [ {
@@ -11,7 +11,7 @@
     "matches": ["http://*/*", "https://*/*"]
   }],
 
-  "permissions": ["http://*/*", "https://*/*", "storage"],
+  "permissions": ["http://*/*", "https://*/*", "storage", "tabs"],
   
   "browser_action": {
     "default_icon": "icon128.png",

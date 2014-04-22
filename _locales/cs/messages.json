@@ -2,6 +2,12 @@
   "pop_title": {
     "message": "Nastavení překladu a klávesové zkratky"
   },
+  "disable_url_label": {
+    "message": "TRS je <b>aktivní</b> pro tuto URL doménu, odškrtněte pro deaktivaci."
+  },
+  "enable_url_label": {
+    "message": "TRS je <b>neaktivní</b> pro tuto URL doménu, zaškrtněte pro aktivaci."
+  },
   "tr_key_label": {
     "message": "Vložte <b>klávesu</b> pro <b>překlad výběru</b> (A - Z):"
   },
@@ -50,7 +56,7 @@
     "message": "Všechna nastavení byla vymazána! Až načtete příští stránku, dojde k uplatnění výchozího nastavení."
   },
   "icon_popup_title": {
-    "message": "Nastavení"
+    "message": "Translate selection - nastavení"
   },
   "translation_fail": {
     "message": "Překlad selhal, zkontrolujte console.log!"
