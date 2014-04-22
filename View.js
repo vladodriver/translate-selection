@@ -1,3 +1,5 @@
+"use strict";
+/*globals Controler, Status*/
 /*********************************************/
 /** View **/
 /*********************************************/
@@ -108,10 +110,10 @@ View.prototype.popupcreate = function() {
       if (Status.resize) { /*resize popup*/
         window.getSelection().empty();
         element.style.cursor = 'se-resize';
-        element.style.width = (parseInt(element.style.width) +
+        element.style.width = (parseInt(element.style.width, 10) +
           (Status.posx - element.xpage)) + 'px';
         element.xpage = Status.posx; /*refresh last xpage mouse position*/
-        element.style.height = (parseInt(element.style.height || element.clientHeight) +
+        element.style.height = (parseInt(element.style.height || element.clientHeight, 10) +
           (Status.posy - element.ypage)) + 'px';
         element.ypage = Status.posy; /*refresh last xpage mouse position*/
       } else if (Status.freeze) { /*Freeze and text selection*/
@@ -132,7 +134,6 @@ View.prototype.popupcreate = function() {
 
 /*Switch translated/original text*/
 View.prototype.viewswitch = function(el) {
-  var langkey = el.querySelector('.langkey');
   if (this.controler.model.viewtransl) {
     el.innerHTML = this.controler.model.original;
     el.classList.add('original');
@@ -217,10 +218,10 @@ View.prototype.voice = function () {
     audio.load();
     audio.play();
     audio.addEventListener('ended', function() {
-      this.src = urls.shift();
-      if (this.src) {
-        this.load();
-        this.play();
+      audio.src = urls.shift();
+      if (audio.src) {
+        audio.load();
+        audio.play();
       } else {
         ttswin.close();
       }

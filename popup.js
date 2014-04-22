@@ -1,4 +1,5 @@
 (function() {
+    "use strict";
     /*globals chrome*/
     var Langs = {
       "Autodetect": "auto",
@@ -197,7 +198,7 @@
         var el = elements[i];
         if (el.nodeName === 'LABEL') {
           el.style.color = (bol) ? '#ddd' : 'black';
-        } else if (el.nodeName === 'INPUT' || el.nodeName === 'BUTTON') {
+        } else {
           el.disabled = (bol) ? true : false;
         }
       }

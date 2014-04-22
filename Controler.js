@@ -1,3 +1,5 @@
+"use strict";
+/*globals Model, Status, chrome*/
 /**********************************************/
 /**Controler **/
 /**********************************************/
@@ -41,8 +43,6 @@ Controler.prototype.translate = function (str) {
 Controler.prototype.translateHTML = function(el) {
   var nodear = []; /*text nodes untranslated*/
   var trtextar = []; /*translated texts*/
-  var trnodear = []; /*text nodes translated*/
-  var transel; /*output dom element*/
   var joinkey = '⌨';
   var self = this;
   var walker = function(node, cb) {
@@ -179,7 +179,6 @@ Controler.prototype.ttsurls = function (sms, tl) {
   var url = 'http://translate.google.com/translate_tts?';
   var prev = 'input';
   var out = sms.map(function(e, i, a) {
-    var part = e;
     var idx = i;
     var q = encodeURIComponent(e);
     var textlen = e.length;
