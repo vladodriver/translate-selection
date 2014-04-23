@@ -9,14 +9,15 @@ var Controler = function Controler() {
 };
 
 /*Complette params to url request for Goole Translate*/
-Controler.prototype.translate = function (str) {
+Controler.prototype.translate = function (str, cb) {
   /*Corection for auto target language*/
   if (Status.options['target-language'][1] === 'auto') {
     Status.options['target-language'][1] = window.clientInformation.language;
   }
   this.model.trlang = Status.options['target-language'][1];
   this.model.srclang = Status.options['source-language'][1];
-  var turl = 'https://translate.google.cz/translate_a/t?';
+
+  var turl = 'https://translate.google.com/translate_a/t?';
   var client = 'j'; /*if(!t) => vystup bude json..*/
   var tl = this.model.trlang;
   var sl = this.model.srclang;
@@ -25,24 +26,37 @@ Controler.prototype.translate = function (str) {
   var q = encodeURIComponent(str);
   var url = turl + 'client=' + client + '&sl=' + sl + '&tl=' + tl + '&ie=' + ie + '&oe=' + oe;
   /*get translation object*/
-  var trobj = this.getjson(url, q);
-  if(trobj) {
-    this.model.srclang = trobj.src; /*save detected src lang*/
-    var out = '';
-    var trchunk = '';
-    for (var i = 0; i < trobj.sentences.length; i++) {
-      trchunk = trobj.sentences[i].trans;
-      out += trchunk;
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url, true);
+  xhr.setRequestHeader('Content-Type',  "application/x-www-form-urlencoded");
+  xhr.send('q=' + q);
+  var self = this;
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        try {
+          var data = JSON.parse(xhr.response);
+          var out = '';
+          var trchunk = '';
+          self.model.srclang = data.src;
+          for (var i = 0; i < data.sentences.length; i++) {
+            trchunk = data.sentences[i].trans;
+            out += trchunk;
+          }
+          cb(null, out);
+        } catch(e) {
+          cb(chrome.i18n.getMessage('ajax_json_parse_err') + ' - ' + e, false);
+        }
+      } else {
+        cb(chrome.i18n.getMessage('ajax_get_data_err') + ' - XHR status: ' + xhr.status, false);
+      }
     }
-    return out;
-  } else {
-    return false;
-  }
+  };
 };
 
 Controler.prototype.translateHTML = function(el) {
   var nodear = []; /*text nodes untranslated*/
-  var trtextar = []; /*translated texts*/
+  var trtextar = []; /*translated text nodes*/
   var joinkey = '⌨';
   var self = this;
   var walker = function(node, cb) {
@@ -61,18 +75,23 @@ Controler.prototype.translateHTML = function(el) {
     }
     var text = textar.join(key);
     /*translate text on html elements splited on joinkey*/
-    var translated = self.translate(text);
-    if (translated) {
-      trtextar = translated.split(joinkey);
-      for(var e = 0; e < trtextar.length; e++) {
-        var fragment = trtextar[e];
-        nodear[e].data = fragment;
+    self.translate(text, function(err, translated) {
+      if (!err) {
+        trtextar = translated.split(joinkey);
+        for(var e = 0; e < trtextar.length; e++) {
+          var fragment = trtextar[e];
+          nodear[e].data = fragment;
+        }
+        self.model.translated = el.innerHTML;
+        el.classList.remove('waiting');
+        el.classList.add('translated');
+        el.lang = self.model.trlang; /*add lang*/
+        el.title = el.lang.toUpperCase();
+      } else {
+        /*Switch HTML to Error mesage*/
+        self.model.translated = el.innerHTML = '<strong>' + chrome.i18n.getMessage('translation_fail') + ' - ' + err + '</strong>';
       }
-      self.model.translated = el.innerHTML;
-    } else {
-      /*Switch HTML to Error mesage*/
-      self.model.translated = el.innerHTML = '<strong>' + chrome.i18n.getMessage('translation_fail') + '</strong>';
-    }
+    });
   };
 
   /*save all text nodes*/
@@ -80,7 +99,7 @@ Controler.prototype.translateHTML = function(el) {
     if(node.nodeType === 3) {
       var text = node.data.trim();
       /*text data must be non-empty and included any \w char*/
-      if(text.length > 0 && self.isword(text)) {
+      if(self.isword(text)) {
         /*<pre> and non-<pre> content logic*/
         self.isinpre(node, function(inar) {
           if (inar) {
@@ -115,28 +134,9 @@ Controler.prototype.isinpre = function(node, cb) {
 
 Controler.prototype.isword = function(str) {
   /*verify that string contains any word character*/
-  if (str.match(/\w/)) {
+  if (str.length > 0 && str.match(/\w/)) {
     return true;
   } else {
-    return false;
-  }
-};
-
-/*Ajax get request to google and */
-Controler.prototype.getjson = function (url, text) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', url, false);
-  xhr.setRequestHeader('Content-Type',  "application/x-www-form-urlencoded");
-  try {
-    xhr.send('q=' + text);
-  } catch(e) {
-    console.error('Send data to Google failed.. ' + e);
-    return false;
-  }
-  if (xhr.status === 200) {
-    return JSON.parse(xhr.response);
-  } else {
-    console.error('Response Google not OK: ' + xhr.status, xhr.responseText);
     return false;
   }
 };
@@ -176,14 +176,13 @@ Controler.prototype.getttsparts = function (str, limit) {
 Controler.prototype.ttsurls = function (sms, tl) {
   var ie = 'utf8';
   var total = sms.length;
-  var url = 'http://translate.google.com/translate_tts?';
-  var prev = 'input';
+  var url = 'https://translate.google.com/translate_tts?';
   var out = sms.map(function(e, i, a) {
     var idx = i;
-    var q = encodeURIComponent(e);
+    var q = e;
     var textlen = e.length;
-    var src = url + 'ie=' + ie + '&q=' + q + '&tl=' + tl + '&total=' + total +
-     '&idx=' + idx + '&textlen=' + textlen + '&prev=' + prev;
+    var src = encodeURI(url + 'ie=' + ie + '&q=' + q + '&tl=' + tl + '&total=' + total +
+     '&idx=' + idx + '&textlen=' + textlen);
     return src;
   });
   return out;

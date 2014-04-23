@@ -59,5 +59,14 @@
   },
   "translation_fail": {
     "message": "Translate failed, check your console.log!"
+  },
+  "tts_title": {
+    "message": "Close TTS voice play"
+  },
+  "ajax_json_parse_err": {
+    "message": "Parse Google data failed!"
+  },
+  "ajax_get_data_err": {
+    "message": "Get translation data from Google failed!"
   }
 }

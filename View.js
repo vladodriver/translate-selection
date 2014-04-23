@@ -1,5 +1,5 @@
 "use strict";
-/*globals Controler, Status*/
+/*globals Controler, Status, chrome*/
 /*********************************************/
 /** View **/
 /*********************************************/
@@ -44,15 +44,13 @@ View.prototype.popupcreate = function() {
   pop.style.width = rwidth + 'px'; /*set width same as selection*/
   pop.style.maxWidth = maxw + 'px';
   pop.style.zIndex = Status.popz++;
+  pop.classList.add('waiting');
   /*save initial scroll X & Y position*/
   pop.scx = Status.scrollX;
   pop.scy = Status.scrollY;
   this.controler.model.original = pop.innerHTML;
   /*translation from Google*/
   this.controler.translateHTML(pop);
-  pop.classList.add('translated');
-  pop.lang = this.controler.model.trlang; /*add lang*/
-  pop.title = this.controler.model.trlang.toUpperCase();
   
   var self = this;
   pop.lasttime = 0;
@@ -136,15 +134,17 @@ View.prototype.popupcreate = function() {
 View.prototype.viewswitch = function(el) {
   if (this.controler.model.viewtransl) {
     el.innerHTML = this.controler.model.original;
-    el.classList.add('original');
     el.classList.remove('translated');
+    el.classList.remove('waiting');
+    el.classList.add('original');
     el.title = this.controler.model.srclang.toUpperCase();
     el.lang = this.controler.model.srclang;
     this.controler.model.viewtransl = false;
   } else {
     el.innerHTML = this.controler.model.translated;
-    el.classList.add('translated');
     el.classList.remove('original');
+    el.classList.remove('waiting');
+    el.classList.add('translated');
     el.lang = el.title = this.controler.model.trlang;
     el.title = this.controler.model.trlang.toUpperCase();
     this.controler.model.viewtransl = true;
@@ -192,7 +192,9 @@ View.prototype.voice = function () {
   link.style.display = 'none';
   var x = parseFloat(el.style.left) + window.screenX;
   var y = parseFloat(el.style.top) + window.screenY;
+  /*adio tts onclick*/
   link.onclick = function(e) {
+    e.preventDefault();
     /*audio TTS popup window*/
     var ttswin = window.open('', '_blank', 'left=' +
       x + ', top=' + y + ', width=100, height=10O');
@@ -207,7 +209,7 @@ View.prototype.voice = function () {
     ttswin.document.body.appendChild(h);
     ttswin.document.body.style.backgroundColor = 'black';
     ttswin.document.body.style.cursor = 'pointer';
-    ttswin.document.body.title = 'Stop TTS Play';
+    ttswin.document.body.title = chrome.i18n.getMessage('tts_title');
     ttswin.focus();
     ttswin.onclick = function(e) {
       if (e.button === 0) {

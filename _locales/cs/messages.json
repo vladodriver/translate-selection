@@ -60,5 +60,14 @@
   },
   "translation_fail": {
     "message": "Překlad selhal, zkontrolujte console.log!"
+  },
+  "tts_title": {
+    "message": "Ukončit TTS hlasové čtení"
+  },
+  "ajax_json_parse_err": {
+    "message": "Selhalo parsování Google translation dat!"
+  },
+  "ajax_get_data_err": {
+    "message": "Data překladu se nepodařilo od Google získat!"
   }
 }

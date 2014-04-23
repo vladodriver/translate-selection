@@ -15,9 +15,13 @@
 }
 
 .translated {
-  background-color: #F1FFF3;
+  background-color: #f5fff7;
 }
 
 .original {
-  background-color: #FFFEF1;
+  background-color: #fffeed;
+}
+
+.waiting {
+  background-color: #f5d7d7;
 }
