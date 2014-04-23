@@ -239,7 +239,8 @@
         for (var j = 0; j < csels.length; j++) {
           var csel = csels[j];
           var selcon = csel.options[csel.selectedIndex].textContent;
-          var selval = csel.options[csel.selectedIndex].value;
+          var numericval = parseInt(csel.options[csel.selectedIndex].value, 10);
+          var selval = (numericval) ? numericval : csel.options[csel.selectedIndex].value;
           var optobj = (csel.id === 'resize-hold-key' || csel.id === 'freeze-hold-key') ? HoldKeys : Langs;
           if(self.validopt(selcon, optobj)) {
             self.opts.options[csel.id] = [selcon, selval];
