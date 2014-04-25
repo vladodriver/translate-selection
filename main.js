@@ -49,8 +49,6 @@ chrome.storage.onChanged.addListener(function(changes) {
 /*On keypress t key create ready popup and translate text*/
 var keydown = function(e) {
   
-  chrome.runtime.sendMessage({page_url_load: location.host});
-  
   if(Status.disurls.indexOf(location.host) === -1) {
     var view = new View();
     if (e.keyCode === Status.options['translate-key'][1]) { /*<T>*/
