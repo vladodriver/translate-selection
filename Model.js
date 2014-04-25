@@ -11,8 +11,7 @@ var Status = {
   popid: 10000,
   resize: false,
   freeze: false,
-  options: {},
-  disabled: false
+  options: {}
 };
 
 var Model = function () {

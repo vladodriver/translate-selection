@@ -206,6 +206,8 @@
       disurllabel.innerHTML = (bol) ?
         chrome.i18n.getMessage('enable_url_label') :
         chrome.i18n.getMessage('disable_url_label');
+      chrome.browserAction.setBadgeText({text: (bol) ? 'OFF' : 'ON'});
+      chrome.browserAction.setBadgeBackgroundColor({color: (bol) ? '#f00' : '#0f0'});
     };
     
     Storage.prototype.save = function() {
