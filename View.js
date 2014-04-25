@@ -37,8 +37,9 @@ View.prototype.popupcreate = function() {
   var rwidth = range.getBoundingClientRect().width;
   ancestor.appendChild(pop);
   pop.appendChild(innerfrag); /*add range fragment*/
-  var firstchildmt = parseInt(window.getComputedStyle(pop.firstChild).marginTop, 10);
-  console.log('FCHP', firstchildmt, 'ON el', pop.firstChild);
+  var firstchildmt = parseInt(window.getComputedStyle(pop.firstChild).marginTop, 10) +
+    parseInt(window.getComputedStyle(pop.firstChild).paddingTop, 10) +
+    parseInt(window.getComputedStyle(pop.firstChild).borderTop, 10);
   pop.id = Status.popid++;
   this.refocus(pop); /*focus to new createt pop*/
   pop.style.top = (range.getBoundingClientRect().top - firstchildmt) + 'px';
