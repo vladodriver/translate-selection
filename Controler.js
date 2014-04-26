@@ -80,7 +80,9 @@ Controler.prototype.translateHTML = function(el) {
         trtextar = translated.split(joinkey);
         for(var e = 0; e < trtextar.length; e++) {
           var fragment = trtextar[e];
-          nodear[e].data = fragment;
+          if(nodear[e]) {
+            nodear[e].data = fragment;
+          }
         }
         self.model.translated = el.innerHTML;
         el.classList.remove('waiting');
@@ -99,7 +101,7 @@ Controler.prototype.translateHTML = function(el) {
     if(node.nodeType === 3) {
       var text = node.data.trim();
       /*text data must be non-empty and included any \w char*/
-      if(self.isword(text)) {
+      if (self.isword(text)) {
         /*<pre> and non-<pre> content logic*/
         self.isinpre(node, function(inar) {
           if (inar) {
