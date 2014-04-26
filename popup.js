@@ -189,10 +189,10 @@
       msgel.textContent = msg;
     };
     
-    Storage.prototype.inactive = function(bol) {
+    Storage.prototype.inactive = function(bol, domain) {
       /*Activate/deactivate inputs in form except checkbox and checkbox label*/
       var elements = document.querySelectorAll('.activatable');
-      var disurllabel = document.querySelector('label[for="on-off"]');
+      var disurllabel = document.querySelector('#disable-status');
       var checkbox = document.querySelector('#on-off');
       for (var i = 0; i < elements.length; i++) {
         var el = elements[i];
@@ -204,8 +204,8 @@
       }
       checkbox.checked = (bol) ? false : true;
       disurllabel.innerHTML = (bol) ?
-        chrome.i18n.getMessage('enable_url_label') :
-        chrome.i18n.getMessage('disable_url_label');
+        chrome.i18n.getMessage('enable_url_label', domain) :
+        chrome.i18n.getMessage('disable_url_label', domain);
       chrome.browserAction.setBadgeText({text: (bol) ? 'OFF' : 'ON'});
       chrome.browserAction.setBadgeBackgroundColor({color: (bol) ? '#f00' : '#0f0'});
     };
@@ -217,13 +217,13 @@
         self.message('', 'm');
         /*Validate and save disable state*/
         var domain = self.gethost(tab[0].url);
-        var checkbox = document.getElementById('on-off');
+        var checkbox = document.querySelector('#on-off');
         if(checkbox.checked) {
           self.delurl(domain);
-          self.inactive(false);
+          self.inactive(false, domain);
         } else {
           self.addurl(domain);
-          self.inactive(true);
+          self.inactive(true, domain);
         }
         
         /*validate text inputs translate and tts key*/
@@ -279,7 +279,7 @@
         chrome.tabs.query({active: true, windowType: 'normal'}, function(tab) {
           var domain = self.gethost(tab[0].url);
           var deactivate = (self.opts.disurls.indexOf(domain) !== -1) ? true : false;
-          self.inactive(deactivate);
+          self.inactive(deactivate, domain);
         });
         /*load values of text inputs*/
         var trttskeys = document.querySelectorAll('input[type="text"]');

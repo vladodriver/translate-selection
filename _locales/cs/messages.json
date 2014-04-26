@@ -3,10 +3,10 @@
     "message": "Nastavení překladu a klávesové zkratky"
   },
   "disable_url_label": {
-    "message": "TRS je <b>aktivní</b> pro tuto URL doménu, odškrtněte pro deaktivaci."
+    "message": "<b>Vypněte</b> pro <b>$1</b> URL doménu."
   },
   "enable_url_label": {
-    "message": "TRS je <b>neaktivní</b> pro tuto URL doménu, zaškrtněte pro aktivaci."
+    "message": "<b>Zapněte</b> pro <b>$1</b> URL doménu."
   },
   "tr_key_label": {
     "message": "Vložte <b>klávesu</b> pro <b>překlad výběru</b> (A - Z):"

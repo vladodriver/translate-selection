@@ -3,10 +3,10 @@
     "message": "Options for translating and keyboard shortcuts"
   },
   "disable_url_label": {
-    "message": "TRS is <b>enabled</b> for this domain URL, uncheck for disable."
+    "message": "<b>Enable</b> for <b>$1</b> URL domain."
   },
   "enable_url_label": {
-    "message": "TRS is <b>disabled</b> for this domain URL, check for enable."
+    "message": "<b>Disable</b> for <b>$1</b> URL domain."
   },
   "tr_key_label": {
     "message": "Enter <b>key</b> option for <b>translate selection</b> (A - Z):"
