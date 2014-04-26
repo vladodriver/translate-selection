@@ -134,7 +134,7 @@ Controler.prototype.isinpre = function(node, cb) {
 
 Controler.prototype.isword = function(str) {
   /*verify that string contains any word character*/
-  if (str.length > 0 && str.match(/\w/)) {
+  if (str.length > 0) {
     return true;
   } else {
     return false;
@@ -179,10 +179,10 @@ Controler.prototype.ttsurls = function (sms, tl) {
   var url = 'https://translate.google.com/translate_tts?';
   var out = sms.map(function(e, i, a) {
     var idx = i;
-    var q = e;
+    var q = encodeURIComponent(e);
     var textlen = e.length;
-    var src = encodeURI(url + 'ie=' + ie + '&q=' + q + '&tl=' + tl + '&total=' + total +
-     '&idx=' + idx + '&textlen=' + textlen);
+    var src = url + 'ie=' + ie + '&q=' + q + '&tl=' + tl + '&total=' + total +
+     '&idx=' + idx + '&textlen=' + textlen;
     return src;
   });
   return out;
