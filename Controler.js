@@ -80,7 +80,7 @@ Controler.prototype.translateHTML = function(el) {
         trtextar = translated.split(joinkey);
         for(var e = 0; e < trtextar.length; e++) {
           var fragment = trtextar[e];
-          if(nodear[e]) {
+          if(nodear[e]) { //replace text only if true
             nodear[e].data = fragment;
           }
         }
