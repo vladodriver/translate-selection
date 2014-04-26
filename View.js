@@ -37,21 +37,10 @@ View.prototype.popupcreate = function() {
   var rwidth = range.getBoundingClientRect().width;
   ancestor.appendChild(pop);
   pop.appendChild(innerfrag); /*add range fragment*/
-  /*Fix top position if fragment have firstChild with margin, padding or border*/
-  var firstch = pop.firstChild; //get first child element
-  var firstchildfix; //padding/margin/border value
-  console.log('FCH', firstch);
-  if (firstch) { // pop have any childern element
-    firstchildfix = (firstch.getComputedStyle) ?
-      parseInt(window.getComputedStyle(firstch).marginTop, 10) +
-      parseInt(window.getComputedStyle(firstch).paddingTop, 10) : 0;
-  } else {
-    firstchildfix = 0;
-  }
-  console.log('FIX px', firstchildfix);
+
   pop.id = Status.popid++;
   this.refocus(pop); /*focus to new createt pop*/
-  pop.style.top = (range.getBoundingClientRect().top - firstchildfix) + 'px';
+  pop.style.top = range.getBoundingClientRect().top + 'px';
   pop.style.left = range.getBoundingClientRect().left + 'px';
   pop.style.width = rwidth + 'px'; /*set width same as selection*/
   pop.style.maxWidth = maxw + 'px';
