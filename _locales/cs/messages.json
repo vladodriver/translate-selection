@@ -2,11 +2,26 @@
   "pop_title": {
     "message": "Nastavení překladu a klávesové zkratky"
   },
+  "on_off_label": {
+    "message": "<b>ZAP./VYP.</b> rozšíření pro URL doménu:"
+  },
   "disable_url_label": {
-    "message": "<b>Vypněte</b> pro <b>$1</b> URL doménu."
+    "message": "Odškrtněte pro <b>vypnutí</b> na: <b>$1</b>."
   },
   "enable_url_label": {
-    "message": "<b>Zapněte</b> pro <b>$1</b> URL doménu."
+    "message": "Zaškrtněte pro <b>zapnutí</b> na: <b>$1</b>."
+  },
+  "url_blacklist_edit": {
+    "message": "Editovat seznam blokovaných URL"
+  },
+  "url_blacklist_close": {
+    "message": "Ukončit editaci blokovaných URL"
+  },
+  "url_list_header": {
+    "message": "Klikněte pro vymazání blokovaných URL domén:"
+  },
+  "url_list_empty": {
+    "message": "Seznam blokovaných URL je prázdný."
   },
   "tr_key_label": {
     "message": "Vložte <b>klávesu</b> pro <b>překlad výběru</b> (A - Z):"
@@ -27,7 +42,7 @@
     "message": "Vyberte <b>cílový jazyk</b> překladu:"
   },
   "reset_button": {
-    "message": "Obnovit výchozí"
+    "message": "Obnovit výchozí nastavení"
   },
 
 

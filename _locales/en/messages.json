@@ -2,11 +2,26 @@
   "pop_title": {
     "message": "Options for translating and keyboard shortcuts"
   },
+  "on_off_label": {
+    "message": "<b>ON/OFF</b> extension for domain URL:"
+  },
   "disable_url_label": {
-    "message": "<b>Enable</b> for <b>$1</b> URL domain."
+    "message": "Uncheck for <b>disable</b> on: <b>$1</b>."
   },
   "enable_url_label": {
-    "message": "<b>Disable</b> for <b>$1</b> URL domain."
+    "message": "Check for <b>enable</b> on: <b>$1</b>."
+  },
+  "url_blacklist_edit": {
+    "message": "Edit list of blocked URLs"
+  },
+  "url_blacklist_close": {
+    "message": "End of editing blocked URLs"
+  },
+  "url_list_header": {
+    "message": "Click for delete blocked URL domains:"
+  },
+  "url_list_empty": {
+    "message": "List of bloked URL domains empty."
   },
   "tr_key_label": {
     "message": "Enter <b>key</b> option for <b>translate selection</b> (A - Z):"
@@ -27,7 +42,7 @@
     "message": "Select translation <b>target language</b>:"
   },
   "reset_button": {
-    "message": "Reset to defaults"
+    "message": "Reset to defaults settings"
   },
 
   "freeze_res_same_key_err": {

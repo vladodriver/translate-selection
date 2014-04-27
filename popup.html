@@ -7,13 +7,19 @@
   <body>
     <form id="main-settings">
       <input id="on-off" type="checkbox" checked><span id="disable-status"></span>
+      <p id="edit-blacklist"></p>
+      <hr />
+      <div id="disurls">
+        <p id="disurls-header"></p>
+        <ul id="disurls-list"></ul>
+      </div>
       <label for="translate-key" class="activatable"></label>
       <input id="translate-key" type="text" class="activatable">
         <!-- translate key selection options -->
       <label for="tts-key" class="activatable"></label>
       <input id="tts-key" type="text" class="activatable">
         <!-- translate key selection options -->
-      <hr />
+      <hr class="activatable" />
 
       <label for="resize-hold-key" class="activatable"></label>
       <select id="resize-hold-key" class="activatable">
@@ -23,7 +29,7 @@
       <select id="freeze-hold-key" class="activatable">
         <!-- freeze hold key selection options -->
       </select>
-      <hr />
+      <hr class="activatable" />
 
       <label for="source-language" class="activatable"></label>
       <select id="source-language" class="activatable">
@@ -34,8 +40,8 @@
         <!-- target language options -->
       </select>
     </form>
-    <hr />
-    <button id="reset" class="activatable">Reset to defaults</button>
+    <hr class="activatable" />
+    <p class="activatable" id="reset">Reset to defaults</p>
     <hr />
     <p id="msg"></p>
     <script src="popup.js"></script>

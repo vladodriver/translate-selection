@@ -1,4 +1,4 @@
-(function() {
+window.onload = function() {
     "use strict";
     /*globals chrome*/
     var Langs = {
@@ -77,6 +77,10 @@
     /*Fill i18n strings*/
     var title = document.querySelector('title');
     title.textContent = chrome.i18n.getMessage('pop_title');
+    var editblacklist = document.querySelector('#edit-blacklist');
+    editblacklist.textContent = chrome.i18n.getMessage('edit_blacklist');
+    var blacklist = document.querySelector('#edit-blacklist');
+    blacklist.textContent = chrome.i18n.getMessage('url_blacklist');
     var trkeyl = document.querySelector('label[for="translate-key"]');
     trkeyl.innerHTML = chrome.i18n.getMessage('tr_key_label');
     var ttsl = document.querySelector('label[for="tts-key"]');
@@ -196,8 +200,11 @@
       var checkbox = document.querySelector('#on-off');
       for (var i = 0; i < elements.length; i++) {
         var el = elements[i];
-        if (el.nodeName === 'LABEL') {
-          el.style.color = (bol) ? '#ddd' : 'black';
+        if (el.nodeName === 'LABEL' || el.nodeName === 'P') {
+          el.style.color = el.style.borderColor = (bol) ? '#ddd' : 'black';
+          el.setAttribute('data-disabled', (bol) ? 'true' : 'false')
+        } else if (el.nodeName === 'HR') {
+          el.style.backgroundColor = (bol) ? '#ddd' : 'black';
         } else {
           el.disabled = (bol) ? true : false;
         }
@@ -210,6 +217,61 @@
       chrome.browserAction.setBadgeBackgroundColor({color: (bol) ? '#f00' : '#0f0'});
     };
     
+    Storage.prototype.renderbl = function() {
+      var blel = document.querySelector('#disurls-list');
+      var blhead = document.querySelector('#disurls-header');
+      blhead.innerHTML = chrome.i18n.getMessage('url_list_header');
+      var self = this;
+      var rem = function(e) {
+        var url = e.target.textContent;
+        self.removebl(url);
+      };
+      if (this.opts.disurls[0]) {
+        blel.innerHTML = ''; //reset
+        for (var i = 0; i < this.opts.disurls.length; i++) {
+          var url = this.opts.disurls[i] || '*localfile*';
+          var liel = document.createElement('li');
+          liel.textContent = url;
+          blel.appendChild(liel);
+          liel.className = 'blurl';
+          liel.onclick = rem;
+        }
+      } else {
+        blel.innerHTML = '<td><tr>' + chrome.i18n.getMessage('url_list_empty'); + '</tr></td>';
+      }
+    };
+    
+    Storage.prototype.removebl = function(url) {
+      /*Render blacklist urls to <li> elements*/
+      var check = document.querySelector('input[type="checkbox"]');
+      if (!check.checked) {
+        check.checked = true;
+      }
+      this.delurl(url); //delete url from opts
+      this.save(); //update/save local storage
+    };
+    
+    Storage.prototype.hideblacklist = function() {
+      /*Hide and show blacklist urls*/
+      var blel = document.querySelector('#disurls');
+      var acti = document.querySelectorAll('.activatable');
+      var hidebt = document.querySelector('#edit-blacklist');
+      var actidisplay;
+      if (blel.style.display === 'none') {
+        blel.style.display = 'block';
+        hidebt.textContent = chrome.i18n.getMessage('url_blacklist_close');
+        actidisplay = 'none';
+      } else {
+        blel.style.display = 'none';
+        hidebt.textContent = chrome.i18n.getMessage('url_blacklist_edit');
+        actidisplay = 'block';
+      }
+      /*Hide or show activatable form elements*/
+      for (var i = 0; i < acti.length; i++) {
+        acti[i].style.display = actidisplay;
+      }
+    };
+    
     Storage.prototype.save = function() {
       /*Save blacklist urls*/
       var self = this;
@@ -220,12 +282,13 @@
         var checkbox = document.querySelector('#on-off');
         if(checkbox.checked) {
           self.delurl(domain);
-          self.inactive(false, domain);
+          self.inactive(false, domain || '*localfile*');
         } else {
           self.addurl(domain);
-          self.inactive(true, domain);
+          self.inactive(true, domain || '*localfile*');
         }
-        
+        /*reload disabled urls*/
+        self.renderbl();
         /*validate text inputs translate and tts key*/
         var keyinps = document.querySelectorAll('input[type="text"]');
         for (var i = 0; i < keyinps.length; i++) {
@@ -265,12 +328,11 @@
     Storage.prototype.load = function() {
       var self = this;
       chrome.storage.local.get(null, function(o) {
+        /*No settings in storage - error need refresh*/
         if (Object.keys(o).length === 0) {
+          var body = document.body;
+          body.innerHTML = '<p id="msg"><p>';
           self.message(chrome.i18n.getMessage('first_browse_err'), 'e');
-          var hideall = document.querySelectorAll('form, button, hr');
-          for (var e = 0; e < hideall.length; e++) {
-            hideall[e].style.display = 'none';
-          }
           return false;
         }
         var options = o.options;
@@ -279,8 +341,11 @@
         chrome.tabs.query({active: true, windowType: 'normal'}, function(tab) {
           var domain = self.gethost(tab[0].url);
           var deactivate = (self.opts.disurls.indexOf(domain) !== -1) ? true : false;
-          self.inactive(deactivate, domain);
+          self.inactive(deactivate, domain || '*localfile*');
         });
+        /*Load url hidden blacklist*/
+        self.renderbl();
+        self.hideblacklist();
         /*load values of text inputs*/
         var trttskeys = document.querySelectorAll('input[type="text"]');
         for (var i = 0; i < trttskeys.length; i++) {
@@ -313,12 +378,21 @@
     
     /*Main program...*/
     var storage = new Storage();
-    storage.load(); /*Load default or saved options*/
+    /*Load default or saved options*/
+    storage.load(); 
+    /*save/update al options when form elements changed*/
     document.querySelector('form').onchange = function() {
       storage.save();
     };
-    document.getElementById('reset').onclick = function() {
-      storage.reseting();
+    /*Show/hide blacklist block for editation*/
+    document.querySelector('#edit-blacklist').onclick = function() {
+      storage.hideblacklist();
+    };
+    /*Reseting defaults*/
+    document.querySelector('#reset').onclick = function(e) {
+      if (e.target.getAttribute('data-disabled') === 'false') {
+        storage.reseting();
+      }
     };
     
-}) ();
+};

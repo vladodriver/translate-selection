@@ -14,9 +14,8 @@ label {
   padding: 2px;
 }
 
-#msg, button {
+#msg {
   font-weight: bold;
-  margin: 0;
 }
 
 hr {
@@ -25,3 +24,42 @@ hr {
   background-color: black; 
   color: black; 
 }
+
+#disurls-header {
+  font-weight: bold;
+  margin: 3px;
+}
+
+#disurls-list {
+  padding: 3px;
+  margin: auto;
+  width: 95%;
+}
+
+.blurl {
+  width: 100%;
+  cursor: pointer;
+  display: table;
+  padding:0;
+}
+
+.blurl:hover {
+  background-color: red;
+}
+
+p {
+  margin: 3px;
+}
+
+#reset, #edit-blacklist {
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 2px;
+  cursor: pointer;
+  text-align: center;
+  background-color: white;
+}
+
+#reset:hover, #edit-blacklist:hover {
+  background-color: #d1e6ff;
+} 
