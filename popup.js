@@ -242,13 +242,19 @@ window.onload = function() {
     };
     
     Storage.prototype.removebl = function(url) {
-      /*Render blacklist urls to <li> elements*/
-      var check = document.querySelector('input[type="checkbox"]');
-      if (!check.checked) {
-        check.checked = true;
-      }
-      this.delurl(url); //delete url from opts
-      this.save(); //update/save local storage
+      var self = this;
+      var checkbox = document.querySelector('#on-off');
+      chrome.tabs.query({active: true}, function(tab) {
+        /*Check checkbox if domain === url*/
+        var domain = self.gethost(tab[0].url);
+        console.log('TAB DOMAIN', domain, 'checkbox', checkbox.checked, 'URL', url, 'TABS', chrome.tabs);
+        if (domain === url) {
+          checkbox.checked = true;
+        }
+        /*Render blacklist urls to <li> elements*/
+        self.delurl(url); //delete url from opts
+        self.save(); //update/save local storage
+      });
     };
     
     Storage.prototype.hideblacklist = function() {
@@ -275,7 +281,7 @@ window.onload = function() {
     Storage.prototype.save = function() {
       /*Save blacklist urls*/
       var self = this;
-      chrome.tabs.query({active: true, windowType: 'normal'}, function(tab) {
+      chrome.tabs.query({active: true}, function(tab) {
         self.message('', 'm');
         /*Validate and save disable state*/
         var domain = self.gethost(tab[0].url);
