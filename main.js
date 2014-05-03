@@ -31,7 +31,7 @@ var keydown = function(e) {
       var alt = (Status.options[id][2]);
       var ctrl = (Status.options[id][3]);
       var shift = (Status.options[id][4]);
-      if ((ctrl === ev.ctrlKey) && (shift === ev.shiftKey)) {
+      if ((alt === ev.altKey) && (ctrl === ev.ctrlKey) && (shift === ev.shiftKey)) {
         view[action].call(view);
       }
     };

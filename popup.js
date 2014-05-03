@@ -398,7 +398,7 @@ window.onload = function() {
       this.curtabreload();
     };
     
-    /*Main program...*/
+    /**************************...Main program...******************************/
     var storage = new Storage();
     /*Load default or saved options*/
     storage.load();
