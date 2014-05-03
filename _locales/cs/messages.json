@@ -44,8 +44,6 @@
   "reset_button": {
     "message": "Obnovit výchozí nastavení"
   },
-
-
   "freeze_res_same_key_err": {
     "message": "Klávesa pro fixaci a změnu rozměrů okna musí být rozdílná! Hlavu vzhůru, zkuste ji nastavit znovu..."
   },
@@ -62,13 +60,13 @@
     "message": "Dobrá práce! Všechna nastavení byla uložena."
   },
   "first_browse_err": {
-    "message": "Musíte prvně načíst nějakou stránku, aby se načetlo výchozí nastavení rozšáření TRS!"
+    "message": "Výchozí nastavení nebyla načtena, vybraný TAB bude resetován!"
   },
   "options_loaded": {
     "message": "Nastavení načtena."
   },
   "options_reseted": {
-    "message": "Všechna nastavení byla vymazána! Až načtete příští stránku, dojde k uplatnění výchozího nastavení."
+    "message": "Všechna nastavení byla resetována na výchozího nastavení!"
   },
   "icon_popup_title": {
     "message": "Translate selection - nastavení"

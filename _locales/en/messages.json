@@ -44,7 +44,6 @@
   "reset_button": {
     "message": "Reset to defaults settings"
   },
-
   "freeze_res_same_key_err": {
     "message": "Freeze and resize keys must be differend! Head up and try setup this again.."
   },
@@ -61,13 +60,13 @@
     "message": "Great job! All options saved."
   },
   "first_browse_err": {
-    "message": "You must be browse any webpage first for loading initial default settings STR extension!"
+    "message": "Default options not loaded, the selected TAB will reset!"
   },
   "options_loaded": {
     "message": "Current options loaded."
   },
   "options_reseted": {
-    "message": "All options deleted! When refresh any page, option will set by default."
+    "message": "All options will reset to default settings!"
   },
   "icon_popup_title": {
     "message": "Translate selection - options"

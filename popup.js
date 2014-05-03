@@ -200,9 +200,9 @@ window.onload = function() {
       var checkbox = document.querySelector('#on-off');
       for (var i = 0; i < elements.length; i++) {
         var el = elements[i];
-        if (el.nodeName === 'LABEL' || el.nodeName === 'P') {
+        if (el.nodeName === 'LABEL' || el.nodeName === 'P' || el.nodeName === 'SPAN') {
           el.style.color = el.style.borderColor = (bol) ? '#ddd' : 'black';
-          el.setAttribute('data-disabled', (bol) ? 'true' : 'false')
+          el.setAttribute('data-disabled', (bol) ? 'true' : 'false');
         } else if (el.nodeName === 'HR') {
           el.style.backgroundColor = (bol) ? '#ddd' : 'black';
         } else {
@@ -237,7 +237,7 @@ window.onload = function() {
           liel.onclick = rem;
         }
       } else {
-        blel.innerHTML = '<td><tr>' + chrome.i18n.getMessage('url_list_empty'); + '</tr></td>';
+        blel.innerHTML = '<td><tr>' + chrome.i18n.getMessage('url_list_empty') + '</tr></td>';
       }
     };
     
@@ -247,7 +247,6 @@ window.onload = function() {
       chrome.tabs.query({active: true}, function(tab) {
         /*Check checkbox if domain === url*/
         var domain = self.gethost(tab[0].url);
-        console.log('TAB DOMAIN', domain, 'checkbox', checkbox.checked, 'URL', url, 'TABS', chrome.tabs);
         if (domain === url) {
           checkbox.checked = true;
         }
@@ -264,13 +263,13 @@ window.onload = function() {
       var hidebt = document.querySelector('#edit-blacklist');
       var actidisplay;
       if (blel.style.display === 'none') {
-        blel.style.display = 'block';
+        blel.style.display = '';
         hidebt.textContent = chrome.i18n.getMessage('url_blacklist_close');
         actidisplay = 'none';
       } else {
         blel.style.display = 'none';
         hidebt.textContent = chrome.i18n.getMessage('url_blacklist_edit');
-        actidisplay = 'block';
+        actidisplay = '';
       }
       /*Hide or show activatable form elements*/
       for (var i = 0; i < acti.length; i++) {
@@ -298,10 +297,13 @@ window.onload = function() {
         /*validate text inputs translate and tts key*/
         var keyinps = document.querySelectorAll('input[type="text"]');
         for (var i = 0; i < keyinps.length; i++) {
-          var ki = keyinps[i];
-          ki.value = ki.value.toUpperCase();
+          var ki = keyinps[i]; //all text inputs
+          ki.value = ki.value.toUpperCase(); //convert to upper case
           if (self.validchar(ki.value)) {
-            self.opts.options[ki.id] = [ki.value, ki.value.charCodeAt()];
+            var alt = document.querySelector('#' + ki.id + '-alt');
+            var ctrl = document.querySelector('#' + ki.id + '-ctrl');
+            var shift = document.querySelector('#' + ki.id + '-shift');
+            self.opts.options[ki.id] = [ki.value, ki.value.charCodeAt(), alt.checked, ctrl.checked, shift.checked];
           }
         }
         
@@ -339,6 +341,7 @@ window.onload = function() {
           var body = document.body;
           body.innerHTML = '<p id="msg"><p>';
           self.message(chrome.i18n.getMessage('first_browse_err'), 'e');
+          self.curtabreload();
           return false;
         }
         var options = o.options;
@@ -353,10 +356,16 @@ window.onload = function() {
         self.renderbl();
         self.hideblacklist();
         /*load values of text inputs*/
-        var trttskeys = document.querySelectorAll('input[type="text"]');
-        for (var i = 0; i < trttskeys.length; i++) {
-          var el = trttskeys[i];
+        var textinpts = document.querySelectorAll('input[type="text"]');
+        for (var i = 0; i < textinpts.length; i++) {
+          var el = textinpts[i];
+          var alt = document.querySelector('#' + el.id + '-alt');
+          var ctrl = document.querySelector('#' + el.id + '-ctrl');
+          var shift = document.querySelector('#' + el.id + '-shift');
           el.value = options[el.id][0];
+          alt.checked = options[el.id][2];
+          ctrl.checked = options[el.id][3];
+          shift.checked = options[el.id][4];
         }
         /*load options for checkboxes shift/ctrl*/
         var selects = document.querySelectorAll('select');
@@ -377,15 +386,22 @@ window.onload = function() {
       });
     };
     
+    Storage.prototype.curtabreload = function() {
+      chrome.tabs.query({active: true}, function(tabs) {
+        chrome.tabs.reload(tabs[0].id);
+      });
+    };
+    
     Storage.prototype.reseting = function(e) {
       chrome.storage.local.clear();
       this.message(chrome.i18n.getMessage('options_reseted'), 'm');
+      this.curtabreload();
     };
     
     /*Main program...*/
     var storage = new Storage();
     /*Load default or saved options*/
-    storage.load(); 
+    storage.load();
     /*save/update al options when form elements changed*/
     document.querySelector('form').onchange = function() {
       storage.save();
@@ -400,5 +416,34 @@ window.onload = function() {
         storage.reseting();
       }
     };
+    /*Blur text input, when key is preseted*/
+    var tinpts = document.querySelectorAll('input[type="text"]');
+    
+    var tiblur = function(e) {
+      /*Capture and auto fill translate/tts key*/
+      if (String.fromCharCode(e.keyCode) !== this.oldval) {
+        this.value = String.fromCharCode(e.keyCode);
+      } else {
+        this.value = this.oldval;
+      }
+      this.blur(); //unfocus
+      document.querySelector('form').onchange(); /*form changed*/
+    };
+    var escapeblur = function() {
+      /*Escape input value back to old..*/
+      if (this.oldval && !this.value) {
+        this.value = this.oldval;
+      } 
+    }; 
+    var intfocus = function() {
+      /*Add events keyup and blur (escape to old input value)*/
+      this.oldval = this.value;
+      this.value = '';
+      this.onkeypress = tiblur;
+      this.onblur = escapeblur;
+    };
+    for (var i = 0; i < tinpts.length; i++) {
+      tinpts[i].onfocus = intfocus;
+    }
     
 };

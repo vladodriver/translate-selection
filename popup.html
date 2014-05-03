@@ -14,10 +14,16 @@
         <ul id="disurls-list"></ul>
       </div>
       <label for="translate-key" class="activatable"></label>
-      <input id="translate-key" type="text" class="activatable">
+      <input id="translate-key-alt" type="checkbox" class="activatable"><span class="activatable">Alt+ </span>
+      <input id="translate-key-ctrl" type="checkbox" class="activatable"><span class="activatable">Ctrl+ </span>
+      <input id="translate-key-shift" type="checkbox" class="activatable"><span class="activatable">Shift+ </span>
+      <input id="translate-key" type="text" maxlength="1" placeholder="[a-z]" class="activatable">
         <!-- translate key selection options -->
       <label for="tts-key" class="activatable"></label>
-      <input id="tts-key" type="text" class="activatable">
+      <input id="tts-key-alt" type="checkbox" class="activatable"><span class="activatable">Alt+ </span>
+      <input id="tts-key-ctrl" type="checkbox" class="activatable"><span class="activatable">Ctrl+ </span>
+      <input id="tts-key-shift" type="checkbox" class="activatable"><span class="activatable">Shift+ </span>
+      <input id="tts-key" type="text" maxlength="1" placeholder="[a-z]" class="activatable">
         <!-- translate key selection options -->
       <hr class="activatable" />
 
@@ -41,7 +47,7 @@
       </select>
     </form>
     <hr class="activatable" />
-    <p class="activatable" id="reset">Reset to defaults</p>
+    <p class="activatable" id="reset"></p>
     <hr />
     <p id="msg"></p>
     <script src="popup.js"></script>
