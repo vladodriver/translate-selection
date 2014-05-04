@@ -14,42 +14,26 @@
         <ul id="disurls-list"></ul>
       </div>
       <label for="translate-key" class="activatable"></label>
-      <input id="translate-key-alt" type="checkbox" class="activatable"><span class="activatable">Alt+ </span>
-      <input id="translate-key-ctrl" type="checkbox" class="activatable"><span class="activatable">Ctrl+ </span>
-      <input id="translate-key-shift" type="checkbox" class="activatable"><span class="activatable">Shift+ </span>
+      <select id ="translate-key-hold" class="activatable"></select>
       <input id="translate-key" type="text" maxlength="1" placeholder="[a-z]" class="activatable">
-        <!-- translate key selection options -->
       <label for="tts-key" class="activatable"></label>
-      <input id="tts-key-alt" type="checkbox" class="activatable"><span class="activatable">Alt+ </span>
-      <input id="tts-key-ctrl" type="checkbox" class="activatable"><span class="activatable">Ctrl+ </span>
-      <input id="tts-key-shift" type="checkbox" class="activatable"><span class="activatable">Shift+ </span>
+      <select id="tts-key-hold" class="activatable"></select>
       <input id="tts-key" type="text" maxlength="1" placeholder="[a-z]" class="activatable">
-        <!-- translate key selection options -->
       <hr class="activatable" />
-
       <label for="resize-hold-key" class="activatable"></label>
-      <select id="resize-hold-key" class="activatable">
-        <!-- resize hold key selection options -->
-      </select>
+      <select id="resize-hold-key" class="activatable"></select>
       <label for="freeze-hold-key" class="activatable"></label>
-      <select id="freeze-hold-key" class="activatable">
-        <!-- freeze hold key selection options -->
-      </select>
+      <select id="freeze-hold-key" class="activatable"></select>
       <hr class="activatable" />
-
       <label for="source-language" class="activatable"></label>
-      <select id="source-language" class="activatable">
-        <!-- source language options -->
-      </select>
+      <select id="source-language" class="activatable"></select>
       <label for="target-language" class="activatable"></label>
-      <select id="target-language" class="activatable">
-        <!-- target language options -->
-      </select>
+      <select id="target-language" class="activatable"></select>
     </form>
     <hr class="activatable" />
-    <p class="activatable" id="reset"></p>
-    <hr />
     <p id="msg"></p>
+    <hr />
+    <p class="activatable" id="reset"></p>
     <script src="popup.js"></script>
   </body>
 </html>

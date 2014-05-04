@@ -4,8 +4,8 @@
 /*Load options from Local Storage*/
 var defopts = {
   options: {
-    'translate-key': ['T', 'T'.charCodeAt(), false, false, false],
-    'tts-key': ['V', 'V'.charCodeAt(), false, false, false],
+    'translate-key': ['T', 'T'.charCodeAt(), '----'],
+    'tts-key': ['V', 'V'.charCodeAt(), '----'],
     'resize-hold-key': ['Ctrl', 17],
     'freeze-hold-key': ['Shift', 16],
     'source-language': ['Autodetect', 'auto'],

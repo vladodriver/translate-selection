@@ -70,8 +70,8 @@ window.onload = function() {
     };
     
     var HoldKeys = {
+      "Ctrl": 17,
       "Shift": 16,
-      "Ctrl": 17
     };
     
     /*Fill i18n strings*/
@@ -97,13 +97,21 @@ window.onload = function() {
     reset.textContent = chrome.i18n.getMessage('reset_button');
     var msg = document.querySelector('#msg'); //messages and errors
     /*Fill in form elements options*/
+    /*Translate and tts hold keys*/
+    var holds = document.querySelectorAll('#translate-key-hold, #tts-key-hold');
+    for (var i = 0; i < holds.length; i++) {
+      holds[i].innerHTML = 
+        '<option>----</option>' +
+        '<option>Ctrl</option>' +
+        '<option>Alt</option>' +
+        '<option>Shift</option>';
+    }
     /*Source language options*/
     var srclanghtml = '';
     for (var s in Langs) {
       srclanghtml += '<option value="' + Langs[s] + '">' + s + '</option>';
     }
-    document.getElementById('source-language').innerHTML = srclanghtml;
-    
+    document.querySelector('#source-language').innerHTML = srclanghtml;
     /*Target language options*/
     var trlanghtml = '';
     for (var t in Langs) {
@@ -153,12 +161,21 @@ window.onload = function() {
       /*Corection Ctrl/Shift - prevent select same selection and same keys*/
       var translateel = document.getElementById('translate-key');
       var ttsel = document.getElementById('tts-key');
+      var translateholdel = document.getElementById('translate-key-hold');
+      var ttsholdel = document.getElementById('tts-key-hold');
       var resizeel = document.getElementById('resize-hold-key');
       var freezeel = document.getElementById('freeze-hold-key');
       
-      if (resizeel.options[resizeel.selectedIndex].value === freezeel.options[freezeel.selectedIndex].value) {
+      var translatekey = translateel.value.toUpperCase();
+      var ttskey = ttsel.value.toUpperCase();
+      var translatehold = translateholdel.options[translateholdel.selectedIndex].value;
+      var ttshold = ttsholdel.options[ttsholdel.selectedIndex].value;
+      var resizeselopt = resizeel.options[resizeel.selectedIndex].value;
+      var freezeselopt = freezeel.options[freezeel.selectedIndex].value;
+      
+      if (resizeselopt === freezeselopt) {
         this.errors.push(chrome.i18n.getMessage('freeze_res_same_key_err'));
-      } else if (translateel.value.toUpperCase() === ttsel.value.toUpperCase()) {
+      } else if ((translatekey === ttskey) && (translatehold === ttshold)) {
         this.errors.push(chrome.i18n.getMessage('srclkey_trlkey_same_err'));
       }
     };
@@ -300,15 +317,17 @@ window.onload = function() {
           var ki = keyinps[i]; //all text inputs
           ki.value = ki.value.toUpperCase(); //convert to upper case
           if (self.validchar(ki.value)) {
-            var alt = document.querySelector('#' + ki.id + '-alt');
-            var ctrl = document.querySelector('#' + ki.id + '-ctrl');
-            var shift = document.querySelector('#' + ki.id + '-shift');
-            self.opts.options[ki.id] = [ki.value, ki.value.charCodeAt(), alt.checked, ctrl.checked, shift.checked];
+            var holdsel = document.querySelector('#' + ki.id + '-hold');
+            var holdidx = holdsel.options.selectedIndex;
+            var holdopt = holdsel.options[holdidx].textContent;
+            self.opts.options[ki.id] = [ki.value, ki.value.charCodeAt(), holdopt];
+          } else {
+            ki.value = ki.oldval;
           }
         }
         
         /*validate select options*/
-        var csels = document.querySelectorAll('select');
+        var csels = document.querySelectorAll('#resize-hold-key, #freeze-hold-key, #source-language, #target-language');
         for (var j = 0; j < csels.length; j++) {
           var csel = csels[j];
           var selcon = csel.options[csel.selectedIndex].textContent;
@@ -358,17 +377,15 @@ window.onload = function() {
         /*load values of text inputs*/
         var textinpts = document.querySelectorAll('input[type="text"]');
         for (var i = 0; i < textinpts.length; i++) {
-          var el = textinpts[i];
-          var alt = document.querySelector('#' + el.id + '-alt');
-          var ctrl = document.querySelector('#' + el.id + '-ctrl');
-          var shift = document.querySelector('#' + el.id + '-shift');
-          el.value = options[el.id][0];
-          alt.checked = options[el.id][2];
-          ctrl.checked = options[el.id][3];
-          shift.checked = options[el.id][4];
+          var ki = textinpts[i];
+          var holdsel = document.querySelector('#' + ki.id + '-hold');
+          holdsel.value = options[ki.id][2];
+          //var holdopt = holdsel.options[holdidx].textContent;
+          ki.value = options[ki.id][0];
+          
         }
         /*load options for checkboxes shift/ctrl*/
-        var selects = document.querySelectorAll('select');
+        var selects = document.querySelectorAll('#resize-hold-key, #freeze-hold-key, #source-language, #target-language');
         for (var j = 0; j < selects.length; j++) {
           var sel = selects[j];
           var loadopts = options[sel.id];
