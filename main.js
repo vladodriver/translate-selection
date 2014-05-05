@@ -56,9 +56,6 @@ var keydown = function(e) {
 };
 
 var keyup = function(e) {
-  if(e.keyCode === Status.options['resize-hold-key'][1]) {
     Status.resize = false;
-  } else if (e.keyCode === Status.options['freeze-hold-key'][1]) {
     Status.freeze = false;
-  }
 };

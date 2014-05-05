@@ -71,7 +71,7 @@ window.onload = function() {
     
     var HoldKeys = {
       "Ctrl": 17,
-      "Shift": 16,
+      "Shift": 16
     };
     
     /*Fill i18n strings*/
@@ -435,9 +435,8 @@ window.onload = function() {
     };
     /*Blur text input, when key is preseted*/
     var tinpts = document.querySelectorAll('input[type="text"]');
-    
-    var tiblur = function(e) {
-      /*Capture and auto fill translate/tts key*/
+    /*Capture and auto fill translate/tts key*/
+    var tinput = function(e) {
       if (String.fromCharCode(e.keyCode) !== this.oldval) {
         this.value = String.fromCharCode(e.keyCode);
       } else {
@@ -446,21 +445,22 @@ window.onload = function() {
       this.blur(); //unfocus
       document.querySelector('form').onchange(); /*form changed*/
     };
-    var escapeblur = function() {
-      /*Escape input value back to old..*/
+    /*Escape input value back to old..*/
+    var storno = function() {
       if (this.oldval && !this.value) {
         this.value = this.oldval;
       } 
-    }; 
+    };
+
+    /*Add events keyup and blur (escape to old input value)*/
     var intfocus = function() {
-      /*Add events keyup and blur (escape to old input value)*/
       this.oldval = this.value;
       this.value = '';
-      this.onkeypress = tiblur;
-      this.onblur = escapeblur;
+      this.onkeypress = tinput;
+      this.onblur = storno;
     };
-    for (var i = 0; i < tinpts.length; i++) {
-      tinpts[i].onfocus = intfocus;
+    for (var j = 0; j < tinpts.length; j++) {
+      tinpts[j].onfocus = intfocus;
     }
-    
+
 };
