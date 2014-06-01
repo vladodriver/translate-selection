@@ -58,6 +58,10 @@ View.prototype.popupcreate = function() {
 
   /*Bind events to each popup*/  
   pop.onmousedown = function(e) {
+    if (!Status.freeze) {
+      e.preventDefault(); //no select text when move & resize
+    }
+
     if (e.button !== 0) return false;
     if ((e.timeStamp - this.lasttime) > 350) { /*One click*/
       /*increshe max z-index*/
@@ -107,7 +111,7 @@ View.prototype.popupcreate = function() {
     
     if (element.moving) {
       if (Status.resize) { /*resize popup*/
-        window.getSelection().empty();
+        //window.getSelection().empty();
         element.style.cursor = 'se-resize';
         element.style.width = (parseInt(element.style.width, 10) +
           (Status.posx - element.xpage)) + 'px';
@@ -118,7 +122,7 @@ View.prototype.popupcreate = function() {
       } else if (Status.freeze) { /*Freeze and text selection*/
         element.style.cursor = 'auto';
       } else { /*Move popup*/
-        window.getSelection().empty();
+        //window.getSelection().empty();
         element.style.cursor = 'move';
         element.style.top = (parseInt(element.style.top, 10) +
           (Status.posy - element.ypage)) + 'px';
