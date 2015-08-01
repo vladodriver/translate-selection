@@ -18,7 +18,7 @@ Controler.prototype.translate = function (str, cb) {
   this.model.srclang = Status.options['source-language'][1];
 
   var turl = 'https://translate.google.com/translate_a/t?';
-  var client = 'j'; /*if(!t) => vystup bude json..*/
+  var client = 'it'; /*if(!t) => vystup bude json..*/
   var tl = this.model.trlang;
   var sl = this.model.srclang;
   var ie, oe; 
@@ -176,6 +176,7 @@ Controler.prototype.getttsparts = function (str, limit) {
 
 /*Make audio src urls with tts sms*/
 Controler.prototype.ttsurls = function (sms, tl) {
+  var client = 't';
   var ie = 'utf8';
   var total = sms.length;
   var url = 'https://translate.google.com/translate_tts?';
@@ -184,7 +185,7 @@ Controler.prototype.ttsurls = function (sms, tl) {
     var q = encodeURIComponent(e);
     var textlen = e.length;
     var src = url + 'ie=' + ie + '&q=' + q + '&tl=' + tl + '&total=' + total +
-     '&idx=' + idx + '&textlen=' + textlen;
+     '&idx=' + idx + '&textlen=' + textlen + '&client=' + client;
     return src;
   });
   return out;
