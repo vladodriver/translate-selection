@@ -17,6 +17,7 @@ Controler.prototype.translate = function (str, cb) {
   this.model.trlang = Status.options['target-language'][1];
   this.model.srclang = Status.options['source-language'][1];
 
+  //var turl = 'https://translate.google.com/translate_a/single?';
   var turl = 'https://translate.google.com/translate_a/t?';
   var client = 'it'; /*if(!t) => vystup bude json..*/
   var tl = this.model.trlang;
