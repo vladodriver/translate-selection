@@ -17,20 +17,29 @@ Controler.prototype.translate = function (str, cb) {
   this.model.trlang = Status.options['target-language'][1];
   this.model.srclang = Status.options['source-language'][1];
 
-  //var turl = 'https://translate.google.com/translate_a/single?';
-  var turl = 'https://translate.google.com/translate_a/t?';
-  var client = 'it'; /*if(!t) => vystup bude json..*/
-  var tl = this.model.trlang;
-  var sl = this.model.srclang;
-  var ie, oe; 
-  ie = oe = 'UTF-8';
+  var apiurl = 'https://translate.googleapis.com/translate_a/single?';
+  var transurl = {
+    dt: 't',
+    dj: '1',
+    sl: this.model.srclang,
+    tl: this.model.trlang,
+    client: 'gtx',
+    source: 'buble'
+  };
+  
+  var trurl = [];
+  for(var key in transurl) {
+    trurl.push(key + '=' + transurl[key]);
+  }
+  
   var q = encodeURIComponent(str);
-  var url = turl + 'client=' + client + '&sl=' + sl + '&tl=' + tl + '&ie=' + ie + '&oe=' + oe;
+  var url = apiurl + trurl.join('&');
   /*get translation object*/
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url, true);
   xhr.setRequestHeader('Content-Type',  "application/x-www-form-urlencoded");
   xhr.send('q=' + q);
+  
   var self = this;
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
