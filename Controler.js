@@ -157,7 +157,7 @@ Controler.prototype.isword = function(str) {
 /*Get words for audio processing*/
 Controler.prototype.getwords = function(str) {
   var words = str.split(' '); /*get words*/
-  words = words.map(function(e, i ,a) {
+  words = words.map(function(e) {
     return e.trim().replace(/ +/g, ''); /*trim trailing whitespaces*/
   });
   return words;
@@ -186,11 +186,11 @@ Controler.prototype.getttsparts = function (str, limit) {
 
 /*Make audio src urls with tts sms*/
 Controler.prototype.ttsurls = function (sms, tl) {
-  var client = 't';
-  var ie = 'utf8';
+  var client = 'chrome';
+  var ie = 'UTF-8';
   var total = sms.length;
   var url = 'https://translate.google.com/translate_tts?';
-  var out = sms.map(function(e, i, a) {
+  var out = sms.map(function(e, i) {
     var idx = i;
     var q = encodeURIComponent(e);
     var textlen = e.length;
