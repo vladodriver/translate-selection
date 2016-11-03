@@ -2,7 +2,7 @@
   "name": "Translation on selection",
   "default_locale": "en",
   "manifest_version": 2,
-  "version": "1.01",
+  "version": "1.0.1",
   "description": "Manipulation, language translation and speak any html selection range on webpage using Goole Translate and Google TTS service.",
   
   "content_scripts": [ {
