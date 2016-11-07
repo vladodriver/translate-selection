@@ -186,7 +186,7 @@ Controler.prototype.getttsparts = function (str, limit) {
 
 /*Make audio src urls with tts sms*/
 Controler.prototype.ttsurls = function (sms, tl) {
-  var client = 'chrome';
+  var client = 'tw-ob';
   var ie = 'UTF-8';
   var total = sms.length;
   var url = 'https://translate.google.com/translate_tts?';
